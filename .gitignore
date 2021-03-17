@@ -1,0 +1,6 @@
+src/private.js
+node_modules
+.cache
+.vscode
+dist
+package-lock.json
