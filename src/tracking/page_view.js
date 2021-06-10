@@ -1,9 +1,6 @@
-import { registerEventListener } from '../utils/eventbus'
-
 export default class PageViewTracker {
-  constructor(splitClient, eventBus) {
+  constructor(splitClient) {
     this.splitClient = splitClient;
-    this.eventBus = eventBus;
 
     if (this.supportsPageTiming()) {
       if (this.checkLoaded()) {
@@ -22,14 +19,14 @@ export default class PageViewTracker {
     const tracker = this;
 
     // Defer, because we should wait until the handlers finish to allow customer logic run first.
-    this.eventBus.addEventListener("load", () => {
+    window.addEventListener("load", (event) => {
       setTimeout(() => {
         tracker.trackPageView()
       }, 0);
     });
 
     // If there's an unload, calculate what's possible and send.
-    this.eventBus.addEventListener("unload", () => {
+    window.addEventListener("unload", (event) => {
       tracker.trackPageView()
     });
   }

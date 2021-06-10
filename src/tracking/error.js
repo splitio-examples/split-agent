@@ -1,7 +1,6 @@
 export default class ErrorTracker {
-  constructor(splitClient, eventBus) {
+  constructor(splitClient) {
     this.splitClient = splitClient;
-    this.eventBus = eventBus;
 
     this.registerEvents();
   }
@@ -11,11 +10,11 @@ export default class ErrorTracker {
   registerEvents() {
     const tracker = this;
     // Capture browser uncaught errors.
-    this.eventBus.addEventListener("error", errorEvent => {
+    window.addEventListener("error", (errorEvent) => {
       tracker.trackError(errorEvent);
     });
     // Capture browser promise rejection errors.
-    this.eventBus.addEventListener("unhandledrejection", errorEvent => { 
+    window.addEventListener("unhandledrejection", (errorEvent) => {
       tracker.trackError(errorEvent.reason);
     });
   }

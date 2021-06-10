@@ -35,11 +35,11 @@ export default class EngagementTracker {
       tracker.userActive(this.now());
     });
 
-    this.eventBus.addEventListener("visibilitychange", event => {
+    window.addEventListener("visibilitychange", (event) => {
       tracker.changeVisibility(this.now());
     });
 
-    this.eventBus.addEventListener("beforeunload", event => {
+    window.addEventListener("beforeunload", (event) => {
       tracker.trackEngagement(this.now());
     });
   }

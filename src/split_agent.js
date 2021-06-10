@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime'
+
 import SplitWrapper from "./split/split_wrapper";
 import PageViewTracker from "./tracking/page_view";
 import ErrorTracker from "./tracking/error";

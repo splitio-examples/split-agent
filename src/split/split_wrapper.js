@@ -1,4 +1,4 @@
-/* global splitio */
+const SplitFactory = require("@splitsoftware/splitio").SplitFactory;
 
 export default class SplitWrapper {
   // Initialization
@@ -6,7 +6,7 @@ export default class SplitWrapper {
   constructor(apikey, identities = {}, defaultProperties = {}) {
     // Factory is instantiated with a placeholder key
     // Clients will be generated for each identity
-    this.factory = splitio({
+    this.factory = SplitFactory({
       core: {
         authorizationKey: apikey,
         key: "PLACE_HOLDER"

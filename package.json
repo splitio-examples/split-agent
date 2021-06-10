@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@splitsoftware/splitio": "^10.15.7",
+    "request": "^2.88.2",
+    "useragent": "^2.3.0",
+    "uuid": "^8.3.2",
+    "yamlparser": "^0.0.2"
+  },
+  "browserslist": [
+    "since 2017-06"
+  ]
+}

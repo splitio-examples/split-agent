@@ -36,7 +36,7 @@ export default class Session {
       tracker.updateLastActiveTime(this.now());
     });
 
-    this.eventBus.addEventListener("beforeunload", event => {
+    window.addEventListener("beforeunload", (event) => {
       tracker.saveToStorage()
     });
   }

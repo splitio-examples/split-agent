@@ -1,8 +1,7 @@
 export default class ClickTracker {
-  constructor(splitClient, eventBus, tracked=[]) {
+  constructor(splitClient, tracked=[]) {
     this.splitClient = splitClient;
-    this.eventBus = eventBus;
-    this.tracked = tracked;
+    this.tracked = tracked || [];
 
     this.RAGE_MIN_CLICKS = 5; // 5 clicks
     this.RAGE_COOLDOWN = 300; // Less than 300 ms apart
@@ -15,9 +14,9 @@ export default class ClickTracker {
   registerEvents() {
     const tracker = this;
     // Capture clicks
-    this.eventBus.addEventListener("click", event => {
+    window.addEventListener("click", (event) => {
       tracker.trackClick(event);
-    });
+    })
   }
 
   // Trackers
