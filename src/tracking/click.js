@@ -38,7 +38,6 @@ export default class ClickTracker {
   // Internal Methods
 
   isTrackedElement(target) {
-    return true;
     if(this.tracked.find((selector) => target.matches(selector))) {
       return true;
     } else {
