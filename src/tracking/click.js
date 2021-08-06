@@ -1,7 +1,9 @@
+import {finder} from '@medv/finder'
+
 export default class ClickTracker {
   constructor(splitClient, tracked=[]) {
     this.splitClient = splitClient;
-    this.tracked = tracked || [];
+    this.tracked = tracked;
 
     this.RAGE_MIN_CLICKS = 5; // 5 clicks
     this.RAGE_COOLDOWN = 300; // Less than 300 ms apart
@@ -22,9 +24,9 @@ export default class ClickTracker {
   // Trackers
 
   trackClick(clickEvent) {
+    const target = finder(clickEvent.target);
     const rage = this.isRageClick(clickEvent);
-    if(rage || this.isTrackedElement(clickEvent)) {
-      const target = clickEvent.target || clickEvent.srcElement;
+    if(rage || this.isTrackedElement(target)) {
       const properties = {
         "click.target": target,
         "click.rage": rage
@@ -35,8 +37,8 @@ export default class ClickTracker {
 
   // Internal Methods
 
-  isTrackedElement(clickEvent) {
-    const target = clickEvent.target || clickEvent.srcElement;
+  isTrackedElement(target) {
+    return true;
     if(this.tracked.find((selector) => target.matches(selector))) {
       return true;
     } else {
@@ -45,25 +47,35 @@ export default class ClickTracker {
   }
 
   isRageClick(clickEvent, currentTime = this.now()) {
-    const target = clickEvent.target || clickEvent.srcElement;
-    if(this.lastClick && this.lastClick.target === target && currentTime - this.lastClick.time < this.RAGE_COOLDOWN) {
+    if(this.lastClick && this.lastClick.target === clickEvent.target && currentTime - this.lastClick.time < this.RAGE_COOLDOWN) {
       const delay = currentTime - this.lastClick.time;
-      // Some rage, update state
-      this.lastClick = {
-        target: target,
-        count: this.lastClick.count + 1,
-        time: currentTime,
-        triggered: false,
-      };
 
+      var rage = false;
       if(!this.lastClick.triggered && this.lastClick.count >= this.RAGE_MIN_CLICKS) {
         // Rage confirmed
-        return true;
+        rage = true;
       }
+      console.log(rage)
+
+      // Some rage, update state
+      this.lastClick = {
+        target: clickEvent.target,
+        count: this.lastClick.count + 1,
+        time: currentTime,
+        triggered: rage || this.lastClick.triggered,
+        delay: delay
+      };
+
+      if(rage) {
+        const rage_event = new CustomEvent('split.rage_click', this.lastClick);
+        document.dispatchEvent(rage_event);
+      }
+
+      return rage;
     } else {
       // No rage, reset state
       this.lastClick = {
-        target: target,
+        target: clickEvent.target,
         count: 1,
         time: currentTime,
         triggered: false,
